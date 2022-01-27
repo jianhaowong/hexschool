@@ -25,7 +25,7 @@ createApp({
 
                     const { token, expired } = res.data;
                     // 從api取出token 時間 宣告常數
-                    document.cookie = `myCookieName=$P}${token}; expires=${new Date(expired)};`
+                    document.cookie = `jianToken=${token}; expires=${new Date(expired)};`
                     // 將token及轉型後的時間 存在瀏覽器 myCookieName為自訂名稱
                     window.location = 'products.html'
                     // 登入成功後 到產品頁
