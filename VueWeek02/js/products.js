@@ -47,7 +47,7 @@ createApp({
                 })
 
         },
-        openProduct() {
+        openProduct(item) {
             this.temp = item;
         }
 
