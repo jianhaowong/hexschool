@@ -79,19 +79,62 @@ createApp({
 
 
         },
-        updateProduct() {
+        addProduct() {
 
-            axios.post(`${this.api}/v2/api/${this.path}/admin/products/${this.temp}`)// 使用post方法與產品API 串接
+            // //先判斷Modal是開啟哪個狀態
+            // if (!this.isNew) {
+            //     // 編輯資料
+            //     axios.put(`${this.api}/v2/api/${this.path}/admin/product/${this.temp.id}`, { data: this.temp })// 使用post方法與產品API 串接
 
-                .then((res) => { // 正確資訊
-                    this.products = res.data.products;
+            //         .then((res) => { // 正確資訊
 
-                })
-                .catch((err) => {
-                    console.log(err.data.message)
-                })
+            //             alert(res.data.message);
+            //             productModal.hide();
+            //             this.getProductsAll();
+            //         })
+            //         .catch((err) => {
+            //             console.log(err.data.message)
+            //         });
 
-        }
+            // } else {
+            //     // 編輯新增資料
+            //     axios.post(`${this.api}/v2/api/${this.path}/admin/product`, { data: this.temp })// 使用post方法與產品API 串接
+
+            //         .then((res) => { // 正確資訊
+
+            //             alert(res.data.message);
+            //             productModal.hide();
+            //             this.getProductsAll();
+            //         })
+            //         .catch((err) => {
+            //             console.log(err.data.message)
+            //         });
+
+            // }
+
+            let url = `${this.api}/v2/api/${this.path}/admin/product`;
+            let http = 'post';
+
+            if (!this.isNew) {
+                url = `${this.api}/v2/api/${this.path}/admin/product/${this.temp.id}`;
+                http = 'put'
+            }
+
+            axios[http](url, { data: this.temp }).then((response) => {
+                alert(response.data.message);
+                productModal.hide();
+                this.getProductsAll();
+            }).catch((err) => {
+                alert(err.data.message);
+            })
+
+
+
+        },
+        createImages() {
+            this.tempProduct.imagesUrl = [];
+            this.tempProduct.imagesUrl.push('');
+        },
 
 
     },

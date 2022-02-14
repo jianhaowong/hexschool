@@ -93,31 +93,39 @@
                                     <img class="img-fluid" :src="temp.imageUrl" alt="">
                                 </div>
                                 <h3 class="mb-3">多圖新增</h3>
-                                <div>
+                                <!-- Array.isArray() 函式會檢查傳入的值是否為一個 Array。 -->
+                                <div v-if=" Array.isArray(temp.imagesUrl)">
 
-                                    <div class="mb-1" v-for="(images,key) in temp.imagesUrl" :key="key">
+                                    <div class="mb-1" v-for="(images,key) in temp.imagesUrl" :key="key + '12345'">
                                         <div class="mb-3">
                                             <label for="imageUrl" class="form-label">圖片網址</label>
-                                            <input v-model="images" type="text" class="form-control"
+                                            <input v-model="temp.imagesUrl[key]" type="text" class="form-control"
                                                 placeholder="請輸入圖片連結">
                                         </div>
-                                        <img class="img-fluid" :src="images">
+                                        <img class="img-fluid" :src="temp.imagesUrl[key]">
                                     </div>
-
-
-                                    <div>
-                                        <button class="btn btn-outline-primary btn-sm d-block w-100">
+                                    <!-- 1.沒有東西陣列長度是0可以新增 2.陣列索引內有沒有輸入文字-->
+                                    <div v-if="!temp.imagesUrl.length || temp.imagesUrl[temp.imagesUrl - 1 ]">
+                                        <!-- 新增陣列 -->
+                                        <button class="btn btn-outline-primary btn-sm d-block w-100"
+                                            @click="temp.imagesUrl.push('')">
                                             新增圖片
                                         </button>
                                     </div>
                                     <div v-else>
-                                        <button class="btn btn-outline-danger btn-sm d-block w-100">
+                                        <!-- 刪除最後一個陣列 -->
+                                        <button class="btn btn-outline-danger btn-sm d-block w-100"
+                                            @click="temp.imagesUrl.pop('')">
                                             刪除圖片
                                         </button>
                                     </div>
 
                                 </div>
-
+                                <div v-else>
+                                    <button class="btn btn-outline-primary btn-sm d-block w-100" @click="createImages">
+                                        新增圖片
+                                    </button>
+                                </div>
                             </div>
                             <div class="col-sm-8">
                                 <div class="mb-3">
@@ -179,7 +187,7 @@
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                             取消
                         </button>
-                        <button type="button" class="btn btn-primary">
+                        <button type="button" class="btn btn-primary" @click="addProduct">
                             確認
                         </button>
                     </div>

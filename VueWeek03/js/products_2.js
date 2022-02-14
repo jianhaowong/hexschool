@@ -16,13 +16,13 @@ createApp({
         }
     },
     mounted() {
-        // productModal = new bootstrap.Modal(document.getElementById('productModal'), {
-        //     keyboard: false
-        // });
+        productModal = new bootstrap.Modal(document.getElementById('productModal'), {
+            keyboard: false
+        });
 
-        // delProductModal = new bootstrap.Modal(document.getElementById('delProductModal'), {
-        //     keyboard: false
-        // });
+        delProductModal = new bootstrap.Modal(document.getElementById('delProductModal'), {
+            keyboard: false
+        });
 
         // 取出 Token
         const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
