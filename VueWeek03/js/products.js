@@ -10,7 +10,9 @@ createApp({
         return {
             api: 'https://vue3-course-api.hexschool.io',
             path: 'jianhao',
-            temp: { imagesUrl: [], },
+            temp: {
+                imagesUrl: [],
+            },
             products: [],
             isNew: false,
         }
@@ -55,7 +57,7 @@ createApp({
         openModal(isNew, item) {
             // 判斷 打開Modal 是哪種功能
             if (isNew === 'new') {
-                // 如果按下是新增產品
+                // 如果按下是新增產品並清空資料
                 this.temp = {
                     imagesUrl: [],
                 }
@@ -74,52 +76,20 @@ createApp({
                 delproductModal.show()
             }
 
-
-
-
-
         },
-        addProduct() {
+        updateProduct() {
 
-            // //先判斷Modal是開啟哪個狀態
-            // if (!this.isNew) {
-            //     // 編輯資料
-            //     axios.put(`${this.api}/v2/api/${this.path}/admin/product/${this.temp.id}`, { data: this.temp })// 使用post方法與產品API 串接
 
-            //         .then((res) => { // 正確資訊
-
-            //             alert(res.data.message);
-            //             productModal.hide();
-            //             this.getProductsAll();
-            //         })
-            //         .catch((err) => {
-            //             console.log(err.data.message)
-            //         });
-
-            // } else {
-            //     // 編輯新增資料
-            //     axios.post(`${this.api}/v2/api/${this.path}/admin/product`, { data: this.temp })// 使用post方法與產品API 串接
-
-            //         .then((res) => { // 正確資訊
-
-            //             alert(res.data.message);
-            //             productModal.hide();
-            //             this.getProductsAll();
-            //         })
-            //         .catch((err) => {
-            //             console.log(err.data.message)
-            //         });
-
-            // }
-
+            //新增資料使用post方法
             let url = `${this.api}/v2/api/${this.path}/admin/product`;
             let http = 'post';
-
+            //判斷Modal是不是修改狀態
             if (!this.isNew) {
+                //修改資料使用put方法
                 url = `${this.api}/v2/api/${this.path}/admin/product/${this.temp.id}`;
                 http = 'put'
             }
-
+            //送出資料
             axios[http](url, { data: this.temp }).then((response) => {
                 alert(response.data.message);
                 productModal.hide();
@@ -131,9 +101,18 @@ createApp({
 
 
         },
-        createImages() {
-            this.tempProduct.imagesUrl = [];
-            this.tempProduct.imagesUrl.push('');
+        delProduct() {
+            // 刪除產品delet方法
+            const url = `${this.api}/v2/api/${this.path}/admin/product/${this.temp.id}`;
+
+            axios.delete(url).then((response) => {
+                alert(response.data.message);
+                delproductModal.hide();
+                this.getProductsAll();
+            }).catch((err) => {
+                alert(err.data.message);
+            })
+
         },
 
 

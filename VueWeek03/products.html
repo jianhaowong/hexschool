@@ -96,7 +96,7 @@
                                 <!-- Array.isArray() 函式會檢查傳入的值是否為一個 Array。 -->
                                 <div v-if=" Array.isArray(temp.imagesUrl)">
 
-                                    <div class="mb-1" v-for="(images,key) in temp.imagesUrl" :key="key + '12345'">
+                                    <div class="mb-1" v-for="(images,key) in temp.imagesUrl" :key="key + '1234'">
                                         <div class="mb-3">
                                             <label for="imageUrl" class="form-label">圖片網址</label>
                                             <input v-model="temp.imagesUrl[key]" type="text" class="form-control"
@@ -105,7 +105,7 @@
                                         <img class="img-fluid" :src="temp.imagesUrl[key]">
                                     </div>
                                     <!-- 1.沒有東西陣列長度是0可以新增 2.陣列索引內有沒有輸入文字-->
-                                    <div v-if="!temp.imagesUrl.length || temp.imagesUrl[temp.imagesUrl - 1 ]">
+                                    <div v-if="!temp.imagesUrl.length || temp.imagesUrl[temp.imagesUrl.length - 1 ]">
                                         <!-- 新增陣列 -->
                                         <button class="btn btn-outline-primary btn-sm d-block w-100"
                                             @click="temp.imagesUrl.push('')">
@@ -115,17 +115,13 @@
                                     <div v-else>
                                         <!-- 刪除最後一個陣列 -->
                                         <button class="btn btn-outline-danger btn-sm d-block w-100"
-                                            @click="temp.imagesUrl.pop('')">
+                                            @click="temp.imagesUrl.pop()">
                                             刪除圖片
                                         </button>
                                     </div>
 
                                 </div>
-                                <div v-else>
-                                    <button class="btn btn-outline-primary btn-sm d-block w-100" @click="createImages">
-                                        新增圖片
-                                    </button>
-                                </div>
+
                             </div>
                             <div class="col-sm-8">
                                 <div class="mb-3">
@@ -187,7 +183,7 @@
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                             取消
                         </button>
-                        <button type="button" class="btn btn-primary" @click="addProduct">
+                        <button type="button" class="btn btn-primary" @click="updateProduct">
                             確認
                         </button>
                     </div>
@@ -206,13 +202,13 @@
                     </div>
                     <div class="modal-body">
                         是否刪除
-                        <strong class="text-danger"></strong> 商品(刪除後將無法恢復)。
+                        <strong class="text-danger">{{temp.title}}</strong> 商品(刪除後將無法恢復)。
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                             取消
                         </button>
-                        <button type="button" class="btn btn-danger">
+                        <button type="button" class="btn btn-danger" @click="delProduct">
                             確認刪除
                         </button>
                     </div>
