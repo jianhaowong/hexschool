@@ -7,7 +7,10 @@ let productModal = null;
 let delproductModal = null;
 
 const app = createApp({
-
+    // 區域註冊
+    components: {
+        pagination
+    },
     // 資料
     data() {
         return {
@@ -70,7 +73,7 @@ const app = createApp({
                 productModal.show();
             } else if (isNew === 'edit') {
                 // 如果按下是編輯產品
-                this.temp = { ...item }
+                this.temp = { imagesUrl: [], ...item }
                 productModal.show();
                 this.isNew = false;
                 productModal.show();
@@ -80,45 +83,8 @@ const app = createApp({
                 this.temp = { ...item }
                 delproductModal.show()
             }
-
         },
-        updateProduct() {
 
-
-            //新增資料使用post方法
-            let url = `${this.api}/v2/api/${this.path}/admin/product`;
-            let http = 'post';
-            //判斷Modal是不是修改狀態
-            if (!this.isNew) {
-                //修改資料使用put方法
-                url = `${this.api}/v2/api/${this.path}/admin/product/${this.temp.id}`;
-                http = 'put'
-            }
-            //送出資料
-            axios[http](url, { data: this.temp }).then((response) => {
-                alert(response.data.message);
-                productModal.hide();
-                this.getProductsAll();
-            }).catch((err) => {
-                alert(err.data.message);
-            })
-
-
-
-        },
-        delProduct() {
-            // 刪除產品delet方法
-            const url = `${this.api}/v2/api/${this.path}/admin/product/${this.temp.id}`;
-
-            axios.delete(url).then((response) => {
-                alert(response.data.message);
-                delproductModal.hide();
-                this.getProductsAll();
-            }).catch((err) => {
-                alert(err.data.message);
-            })
-
-        },
 
 
     },
@@ -144,10 +110,73 @@ const app = createApp({
 
 
     },
-    // 區域註冊
-    components: {
-        pagination
-    },
-});
 
-app.mount('#app')
+});
+// 全域註冊-新增編輯視窗
+app.component('productModal', {
+    template: '#productTemplate',
+    props: ['temp', 'isNew'],
+    data() {
+        return {
+            api: 'https://vue3-course-api.hexschool.io',
+            path: 'jianhao',
+        }
+    },
+    methods: {
+        updateProduct() {
+
+
+            //新增資料使用post方法
+            let url = `${this.api}/v2/api/${this.path}/admin/product`;
+            let http = 'post';
+            //判斷Modal是不是修改狀態
+            if (!this.isNew) {
+                //修改資料使用put方法
+                url = `${this.api}/v2/api/${this.path}/admin/product/${this.temp.id}`;
+                http = 'put'
+            }
+            //送出資料
+            axios[http](url, { data: this.temp }).then((response) => {
+                alert(response.data.message);
+                productModal.hide();
+                // this.getProductsAll();
+                this.$emit('get-products');
+            }).catch((err) => {
+                alert(err.data.message);
+            })
+
+
+
+        }
+    }
+
+});
+// 全域註冊-刪除視窗
+app.component('delModal', {
+    template: '#delTemplate',
+    props: ['temp'],
+    data() {
+        return {
+            api: 'https://vue3-course-api.hexschool.io',
+            path: 'jianhao',
+        }
+    },
+    methods: {
+        delProduct() {
+            // 刪除產品delet方法
+            const url = `${this.api}/v2/api/${this.path}/admin/product/${this.temp.id}`;
+
+            axios.delete(url).then((response) => {
+                alert(response.data.message);
+                delproductModal.hide();
+                // emit 內到外 methods 接收
+                this.$emit('get-products');
+            }).catch((err) => {
+                alert(err.data.message);
+            })
+
+        },
+    }
+
+});
+app.mount('#app');

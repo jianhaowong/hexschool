@@ -1,10 +1,10 @@
 export default {
-    // 由外到內
-    props: ['pages'],
-    template: `<nav aria-label="Page navigation example">
+  // 由外到內
+  props: ['pages'],
+  template: `<nav aria-label="Page navigation example">
     <ul class="pagination">
       <li class="page-item" :class="{disabled:!pages.has_pre}">
-        <a class="page-link" href="#" aria-label="Previous">
+        <a class="page-link" href="#" aria-label="Previous" @click.prevent="$emit('get-products', pages.current_page - 1)">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
@@ -13,7 +13,7 @@ export default {
       </li>
      
       <li class="page-item"  :class="{disabled:!pages.has_next}">
-        <a class="page-link" href="#" aria-label="Next">
+        <a class="page-link" href="#" aria-label="Next"  @click.prevent="$emit('get-products', pages.current_page + 1)">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
