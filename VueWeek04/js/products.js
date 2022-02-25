@@ -1,7 +1,7 @@
 
 import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.esm-browser.js';
 // 匯入分頁模板
-import pagination from 'pagination.js';
+import pagination from '../js/pagination.js';
 // 引入 vue
 let productModal = null;
 let delproductModal = null;
