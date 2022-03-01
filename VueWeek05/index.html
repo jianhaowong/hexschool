@@ -18,6 +18,8 @@
         <div class="container">
             <div class="mt-4">
                 <!-- 產品Modal -->
+                <!-- 錢內後外 -->
+                <product-modal :id="productsId" ref="productModal"></product-modal>
 
                 <!-- 產品Modal -->
 
@@ -31,19 +33,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr v-for="item in products" :key="item.id">
                             <td style="width: 200px">
-                                <div style="height: 100px; background-size: cover; background-position: center;"></div>
+                                <!--:style 為物件刑式  -->
+                                <div :style="{backgroundImage:`url(${item.imageUrl})`}" style="height: 100px; background-size: cover; background-position: center;"></div>
                             </td>
-                            <td>{{ }}</td>
+                            <td>{{ item.title }}</td>
                             <td>
-                                <div class="h5">{{ }} 元</div>
-                                <del class="h6">原價 {{ }} 元</del>
-                                <div class="h5">現在只要 {{ }} 元</div>
+                                <!-- 有特價時顯示特價 不然顯示原價 -->
+                                <div class="h5" v-if="item.price === item.origin_price">{{ item.price }} 元</div>
+                                <div v-else>
+                                    <del class="h6">原價 {{ item.origin_price }} 元</del>
+                                    <div class="h5">現在只要 {{ item.price }} 元</div>
+                                </div>
+                                
                             </td>
                             <td>
                                 <div class="btn-group btn-group-sm">
-                                    <button type="button" class="btn btn-outline-secondary">
+                                    <button type="button" class="btn btn-outline-secondary" @click="openProductModal(item.id)">
                                         <i class="fas fa-spinner fa-pulse"></i>
                                         查看更多
                                     </button>
@@ -195,21 +202,21 @@
         </div> -->
         </div>
     </div>
-<!-- <script type="text/x-template" id="userProductModal">
+<script type="text/x-template" id="userProductModal">
         <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true" ref="modal">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content border-0">
                 <div class="modal-header bg-dark text-white">
                     <h5 class="modal-title" id="exampleModalLabel">
-                        <span>{{  }}</span>
+                        <span>{{ product.title }}</span>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-6">
-                            <img class="img-fluid" :src="..." alt="">
+                            <img class="img-fluid" :src="product.imageUrl" alt="">
                         </div>
                         <div class="col-sm-6">
                             <span class="badge bg-primary rounded-pill">{{  }}</span>
@@ -230,7 +237,7 @@
             </div>
         </div>
     </div>
-</script> -->
+</script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js"
         integrity="sha512-Xk3wWei2TGrsh9kDSBKUMIjw/86sLUvhtnv9f7fOuIwhhiUTKz8szkWkzHthrM5Bb3Bu9idSzkxOrkzhcneuiw=="
