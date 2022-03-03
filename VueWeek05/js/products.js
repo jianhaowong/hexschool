@@ -13,6 +13,8 @@ const app = createApp({
             cartData:{},
             products:[],
             productsId:'',
+            // 
+            LoadingItem:'',
         }
     },
     //方法
@@ -26,7 +28,7 @@ const app = createApp({
                 console.log(this.products);
 
             });
-            console.log("123.");
+            
         },
         // 打開產品Modal
         openProductModal(id){
@@ -36,12 +38,66 @@ const app = createApp({
             this.$refs.productModal.openModal();
 
 
-        }
+        },
+        // 取得購物車
+        getCart(){
+            axios.get(`${apiUrl}/api/${path}/cart`)
+            .then((res)=>{
+                
+                 this.cartData=  res.data.data;
+                console.log(res);
+
+            });
+        },
+        // 加入購物車 (帶入產品ID , 參數預設值為1)
+        addCart(id,qty = 1){
+            const data = {
+                product_id:id,
+                qty,
+            }
+            this.LoadingItem = id;
+            axios.post(`${apiUrl}/api/${path}/cart`,{data})
+            .then((res)=>{
+                
+                // this.cartData.products =  res.data.products;
+                console.log(res);
+                this.getCart()
+                this.LoadingItem = ' ';
+                this.$refs.productModal.closeModal();
+            });
+        },
+        // 刪除單個購物車
+        delCartItem(id){
+            this.LoadingItem = id;
+            axios.delete(`${apiUrl}/api/${path}/cart/${id}`)
+            .then((res)=>{
+                this.getCart()
+                this.LoadingItem = ' ';
+            });
+        },
+        // 更新購物車
+        updataCart(item){
+            const data = {
+                product_id:item.id,
+                qty:item.qty,
+            }
+            this.LoadingItem = item.id;
+            axios.put(`${apiUrl}/api/${path}/cart/${item.id}`,{data})
+            .then((res)=>{
+                
+                // this.cartData.products =  res.data.products;
+                console.log(res);
+                this.getCart()
+                this.LoadingItem = ' ';
+            });
+        },
+
     },
 
     //生命週期
     mounted(){
         this.getProducts();
+        this.getCart();
     }
 
 });
@@ -56,6 +112,7 @@ app.component('product-modal',{
             // 不同作用域在這定義 modal
             modal:{},
             product:{},
+            qty:1,
         }
     },
     // 當ID變動時觸動getProduct()
@@ -69,6 +126,9 @@ app.component('product-modal',{
         openModal(){
             this.modal.show();
         },
+        closeModal(){
+            this.modal.hide();
+        },
         // 用ID取得原端資料
         getProduct(){
             axios.get(`${apiUrl}/api/${path}/product/${this.id}`)
@@ -78,6 +138,9 @@ app.component('product-modal',{
                 console.log(res);
 
             });
+        },
+        addCart(){
+            this.$emit('add-cart', this.product.id, this.qty)
         }
         
     },
