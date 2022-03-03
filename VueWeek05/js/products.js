@@ -140,7 +140,8 @@ app.component('product-modal',{
             });
         },
         addCart(){
-            this.$emit('add-cart', this.product.id, this.qty)
+            this.$emit('add-cart', this.product.id, this.qty);
+            
         }
         
     },
