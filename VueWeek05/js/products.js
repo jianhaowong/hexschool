@@ -1,5 +1,5 @@
 // 引入 vue
-import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.esm-browser.js';
+// import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.esm-browser.js';
 
 // VeeValidate 套件
 const { defineRule, Form, Field, ErrorMessage, configure } = VeeValidate;
@@ -17,6 +17,7 @@ loadLocaleFromURL('https://unpkg.com/@vee-validate/i18n@4.1.0/dist/locale/zh_TW.
 
 configure({
     generateMessage: localize('zh_TW'),
+    validateOnInput: true,
 });
 
 // 匯入分頁模板
@@ -25,11 +26,14 @@ const path = 'jianhao';
 
 
 // 建立 vue 實體
-const app = createApp({
+const app = Vue.createApp({
 
     data() {
         return {
-            cartData: {},
+            cartData: {  
+                
+                carts: [],
+            },
             products: [],
             productsId: '',
             // 
@@ -44,7 +48,7 @@ const app = createApp({
                 },
                 message: '',
             },
-
+            isLoading: false,
 
         }
     },
@@ -134,6 +138,14 @@ const app = createApp({
         },
         // 清空購物車
         delAllCarts() {
+
+            this.isLoading = true;
+            
+            setTimeout(() => {
+              this.isLoading = false;
+            }, 1000);
+
+
             axios.delete(`${apiUrl}/api/${path}/carts`)
                 .then((res) => {
                     alert("購物車以清空");
@@ -215,5 +227,6 @@ app.component('product-modal', {
     },
 
 });
-
+// app.use(VueLoading.Plugin);
+app.component("Loading", VueLoading.Component);
 app.mount('#app');
