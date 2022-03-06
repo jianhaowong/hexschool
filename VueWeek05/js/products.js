@@ -6,7 +6,7 @@ const { defineRule, Form, Field, ErrorMessage, configure } = VeeValidate;
 const { required, email, min, max } = VeeValidateRules;
 const { localize, loadLocaleFromURL } = VeeValidateI18n;
 
-// VeeValidate 套件設定
+// VeeValidate 定義規則
 defineRule('required', required);
 defineRule('email', email);
 defineRule('min', min);
@@ -140,7 +140,7 @@ const app = Vue.createApp({
         delAllCarts() {
 
             this.isLoading = true;
-            
+
             setTimeout(() => {
               this.isLoading = false;
             }, 1000);
@@ -154,13 +154,21 @@ const app = Vue.createApp({
                     alert(err.data.message);
                 });
         },
+          // 送出表單
         createOrder(){
+            this.isLoading = true;
+
+            setTimeout(() => {
+              this.isLoading = false;
+            }, 1000);
+
             const order = this.form;
             axios.post(`${apiUrl}/api/${path}/order`,{data: order})
                 .then((res) => {
                     alert(res.data.message);
                     // 表單送出後清空 resetForm()此為套件方法
                     this.$refs.form.resetForm();
+                    this.form.message = "";
                     this.getCart();
                 }).catch((err) => {
                     alert(err.data.message);
